@@ -1,6 +1,7 @@
 import express from 'express'
 import userRouter from '@/modules/user/user.routes.js'
 import authRouter from '@/modules/auth/auth.routes.js'
+import orderRouter from '@/modules/order/order.routes.js'
 import { errorHandler } from '@/middlewares/errorHandler.middleware.js'
 
 const app = express()
@@ -15,6 +16,7 @@ app.use((req, res, next) => {
 
 app.use('/users', userRouter)
 app.use('/auth', authRouter)
+app.use('/orders', orderRouter)
 
 app.use(errorHandler)
 
