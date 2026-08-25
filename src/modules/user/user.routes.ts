@@ -1,18 +1,14 @@
-import { Router, type Router as RouterType } from 'express'
-import {
-  getUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser,
-} from '@/modules/user/user.controller.js'
+import { Router } from 'express'
+import { getUsers, getUserById, updateUser, deleteUser } from '@/modules/user/user.controller.js'
+import { validate } from '@/middlewares/validate.middleware.js'
+import { updateUserSchema } from '@/modules/user/user.schema.js'
+import { authenticate } from '@/middlewares/auth.middleware.js'
 
-const router: RouterType = Router()
+const router: Router = Router()
 
 router.get('/', getUsers)
 router.get('/:id', getUserById)
-router.post('/', createUser)
-router.put('/:id', updateUser)
-router.delete('/:id', deleteUser)
+router.put('/:id', validate(updateUserSchema), updateUser)
+router.delete('/:id', authenticate, deleteUser)
 
 export default router

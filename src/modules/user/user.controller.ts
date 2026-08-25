@@ -15,11 +15,6 @@ export async function getUserById(req: Request, res: Response, next: NextFunctio
   }
 }
 
-export async function createUser(req: Request, res: Response) {
-  const newUser = await userService.createUser(req.body.name)
-  res.status(201).json(newUser)
-}
-
 export async function updateUser(req: Request, res: Response, next: NextFunction) {
   try {
     const user = await userService.updateUser(Number(req.params.id), req.body.name)

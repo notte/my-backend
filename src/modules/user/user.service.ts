@@ -13,8 +13,6 @@ export const userService = {
     return user
   },
 
-  createUser: (name: string) => userRepository.create(name),
-
   updateUser: async (id: number, name: string) => {
     try {
       return await userRepository.update(id, name)
