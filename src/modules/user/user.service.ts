@@ -21,11 +21,18 @@ export const userService = {
     }
   },
 
-  deleteUser: async (id: number) => {
-    try {
-      await userRepository.delete(id)
-    } catch {
+  deleteUser: async (id: number, requesterId: number, requesterRole: 'USER' | 'ADMIN') => {
+    const target = await userRepository.findById(id)
+    if (!target) {
       throw new AppError(ErrorMessages.USER_NOT_FOUND, 404)
     }
+
+    const isSelf = requesterId === id
+    const isAdmin = requesterRole === 'ADMIN'
+    if (!isSelf && !isAdmin) {
+      throw new AppError('You are not allowed to delete this user', 403)
+    }
+
+    await userRepository.delete(id)
   },
 }

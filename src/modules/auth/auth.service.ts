@@ -31,8 +31,8 @@ export const authService = {
       throw new AppError('Invalid email or password', 401)
     }
 
-    const token = jwt.sign({ userId: user.id }, env.jwtSecret as string, { expiresIn: '1h' })
-
+    const token = jwt.sign({ userId: user.id, role: user.role }, env.jwtSecret as string, { expiresIn: '1h' })
+    
     return { token }
   },
 }

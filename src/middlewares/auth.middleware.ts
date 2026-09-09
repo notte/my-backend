@@ -3,8 +3,11 @@ import jwt from 'jsonwebtoken'
 import { env } from '@/config/env.js'
 import { AppError } from '@/common/exceptions/AppError.js'
 
+export type Role = 'USER' | 'ADMIN'
+
 export interface AuthRequest extends Request {
   userId?: number
+  role?: Role
 }
 
 export function authenticate(req: AuthRequest, res: Response, next: NextFunction) {
@@ -21,8 +24,9 @@ export function authenticate(req: AuthRequest, res: Response, next: NextFunction
   }
 
   try {
-    const payload = jwt.verify(token, env.jwtSecret as string) as unknown as { userId: number }
+    const payload = jwt.verify(token, env.jwtSecret as string) as unknown as { userId: number; role: Role }
     req.userId = payload.userId
+    req.role = payload.role
     next()
   } catch {
     next(new AppError('Invalid or expired token', 401))
