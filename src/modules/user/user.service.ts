@@ -14,15 +14,24 @@ export const userService = {
     return user
   },
 
-  updateUser: async (id: number, name: string) => {
-    try {
-      return await userRepository.update(id, name)
-    } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
-        throw new AppError(ErrorMessages.USER_NOT_FOUND, 404)
-      }
-      throw err
+  updateUser: async (
+    id: number,
+    name: string,
+    requesterId: number,
+    requesterRole: 'USER' | 'ADMIN',
+  ) => {
+    const target = await userRepository.findById(id)
+    if (!target) {
+      throw new AppError(ErrorMessages.USER_NOT_FOUND, 404)
     }
+
+    const isSelf = requesterId === id
+    const isAdmin = requesterRole === 'ADMIN'
+    if (!isSelf && !isAdmin) {
+      throw new AppError('You are not allowed to update this user', 403)
+    }
+
+    return await userRepository.update(id, name)
   },
 
   deleteUser: async (id: number, requesterId: number, requesterRole: 'USER' | 'ADMIN') => {

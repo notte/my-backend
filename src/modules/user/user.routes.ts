@@ -9,7 +9,7 @@ const router: Router = Router()
 
 router.get('/', asyncHandler(getUsers))
 router.get('/:id', asyncHandler(getUserById))
-router.put('/:id', validate(updateUserSchema), asyncHandler(updateUser))
+router.put('/:id', authenticate, validate(updateUserSchema), asyncHandler(updateUser))
 router.delete('/:id', authenticate, asyncHandler(deleteUser))
 
 export default router

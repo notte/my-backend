@@ -12,8 +12,13 @@ export async function getUserById(req: Request, res: Response) {
   res.json(user)
 }
 
-export async function updateUser(req: Request, res: Response) {
-  const user = await userService.updateUser(Number(req.params.id), req.body.name)
+export async function updateUser(req: AuthRequest, res: Response) {
+  const user = await userService.updateUser(
+    Number(req.params.id),
+    req.body.name,
+    req.userId!,
+    req.role!,
+  )
   res.json(user)
 }
 
